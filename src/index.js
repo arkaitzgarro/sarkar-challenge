@@ -21,7 +21,10 @@ function handleRequest(request, response) {
     res.pipe(response, { end: true });
   });
 
-  proxy.on('error', console.error);
+  proxy.on('error', function error(error) {
+    response.statusCode = 500;
+    response.end(error.message);
+  });
   request.pipe(proxy, { end: true });
 }
 
